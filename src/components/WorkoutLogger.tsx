@@ -13,7 +13,7 @@ const WORKOUT_TYPES: { value: WorkoutType; label: string; icon: string }[] = [
 ];
 
 export const WorkoutLogger = () => {
-  const { logWorkout, hunter } = useHunterStore();
+  const { logWorkout } = useHunterStore();
   const { addNotification } = useNotificationStore();
   const [type, setType] = useState<WorkoutType>('strength');
   const [duration, setDuration] = useState<number>(30);
@@ -29,8 +29,6 @@ export const WorkoutLogger = () => {
     
     // Small delay for UX feedback
     await new Promise((resolve) => setTimeout(resolve, 300));
-    
-    const previousLevel = hunter?.level || 1;
     
     // Calculate expected EXP gain for notification
     const { expGained } = calculateWorkoutRewards(type, duration, intensity);

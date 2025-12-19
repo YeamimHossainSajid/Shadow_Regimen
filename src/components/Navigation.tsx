@@ -3,34 +3,61 @@ import { motion } from 'framer-motion';
 
 const NAV_ITEMS = [
   { path: '/dashboard', label: 'Dashboard', icon: '🏠' },
-  { path: '/workout-logger', label: 'Log Workout', icon: '💪' },
+  { path: '/profile', label: 'Profile', icon: '👤' },
+  { path: '/workouts', label: 'Workouts', icon: '💪' },
   { path: '/plans', label: 'Plans', icon: '📋' },
   { path: '/progress', label: 'Progress', icon: '📊' },
-  { path: '/tutorials', label: 'Tutorials', icon: '📚' },
 ];
 
 export const Navigation = () => {
   const location = useLocation();
 
   return (
-    <nav className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-40">
-      <div className="flex gap-2 bg-black/80 backdrop-blur-md border-2 border-system-cyan/30 rounded-full px-4 py-2">
+    <nav style={{
+      position: 'fixed',
+      bottom: '1rem',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      zIndex: 40,
+    }}>
+      <div style={{
+        display: 'flex',
+        gap: '0.5rem',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        border: '2px solid rgba(0, 255, 255, 0.3)',
+        borderRadius: '9999px',
+        padding: '0.5rem 1rem',
+      }}>
         {NAV_ITEMS.map((item) => {
           const isActive = location.pathname === item.path;
           return (
             <Link key={item.path} to={item.path}>
               <motion.div
-                className={`px-4 py-2 rounded-full transition-all ${
-                  isActive
-                    ? 'bg-system-cyan/20 border-2 border-system-cyan shadow-cyan-glow-sm'
-                    : 'border-2 border-transparent hover:border-system-cyan/30'
-                }`}
+                style={{
+                  padding: '0.5rem 1rem',
+                  borderRadius: '9999px',
+                  transition: 'all 0.3s',
+                  border: isActive ? '2px solid #00ffff' : '2px solid transparent',
+                  backgroundColor: isActive ? 'rgba(0, 255, 255, 0.2)' : 'transparent',
+                  boxShadow: isActive ? '0 0 10px rgba(0, 255, 255, 0.5)' : 'none',
+                }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <div className="flex items-center gap-2">
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  whiteSpace: 'nowrap',
+                }}>
                   <span>{item.icon}</span>
-                  <span className={`font-rajdhani text-sm ${isActive ? 'text-system-cyan' : 'text-gray-400'}`}>
+                  <span style={{
+                    fontFamily: 'Rajdhani, sans-serif',
+                    fontSize: '0.75rem',
+                    color: isActive ? '#00ffff' : '#9ca3af',
+                  }}>
                     {item.label}
                   </span>
                 </div>

@@ -5,10 +5,12 @@ import { Onboarding } from './components/Onboarding';
 import { Dashboard } from './components/Dashboard';
 import { WorkoutLogger } from './components/WorkoutLogger';
 import { WorkoutPlanNavigator } from './components/WorkoutPlanNavigator';
-import { ProgressCharts } from './components/ProgressCharts';
-import { Tutorials } from './components/Tutorials';
+import { ProgressChart } from './components/ProgressChart';
+import { Profile } from './components/Profile';
 import { Notifications } from './components/Notifications';
 import { Navigation } from './components/Navigation';
+import { WorkoutList } from './components/fitness/WorkoutList';
+import { LevelUpOverlay } from './components/LevelUpOverlay';
 import { useHunterStore } from './store/hunterStore';
 import { useNotificationStore } from './store/notificationStore';
 
@@ -16,6 +18,8 @@ function App() {
   const { hasBooted, hunter, initializeHunter, checkAndGeneratePenaltyQuests, levelUpFlag, clearLevelUpFlag, setHasBooted } = useHunterStore();
   const { addNotification } = useNotificationStore();
   const [isHydrated, setIsHydrated] = useState(false);
+  const [showLevelUp, setShowLevelUp] = useState(false);
+  const [newLevel, setNewLevel] = useState(1);
 
   // Wait for store hydration
   useEffect(() => {
@@ -51,6 +55,8 @@ function App() {
 
   useEffect(() => {
     if (levelUpFlag && hunter) {
+      setNewLevel(hunter.level);
+      setShowLevelUp(true);
       addNotification(`LEVEL UP! You are now Level ${hunter.level}`, 'level-up');
       clearLevelUpFlag();
     }
@@ -109,14 +115,21 @@ function App() {
         }}>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/workout-logger" element={<WorkoutLogger />} />
+            <Route path="/workouts" element={<WorkoutList />} />
             <Route path="/plans" element={<WorkoutPlanNavigator />} />
-            <Route path="/progress" element={<ProgressCharts />} />
-            <Route path="/tutorials" element={<Tutorials />} />
+            <Route path="/progress" element={<ProgressChart />} />
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
           </Routes>
           <Navigation />
           <Notifications />
+          {showLevelUp && (
+            <LevelUpOverlay
+              newLevel={newLevel}
+              onClose={() => setShowLevelUp(false)}
+            />
+          )}
         </div>
       )}
     </BrowserRouter>

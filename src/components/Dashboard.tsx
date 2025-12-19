@@ -1,17 +1,23 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useHunterStore } from '../store/hunterStore';
+import { useWorkoutStore } from '../stores/workoutStore';
 import { GlassPanel } from './GlassPanel';
 import { QuestPanel } from './QuestPanel';
 import { LevelPathway } from './LevelPathway';
-import { WorkoutLogger } from './WorkoutLogger';
+import { MusicController } from './MusicController';
+import { ExerciseCard } from './fitness/ExerciseCard';
 
 export const Dashboard = () => {
   const { hunter } = useHunterStore();
+  const { getRecommendedExercise, getCompletedToday } = useWorkoutStore();
 
   if (!hunter) return null;
 
   const progress = (hunter.exp / hunter.expToNextLevel) * 100;
+  const recommendedExercise = getRecommendedExercise(hunter.level);
+  const completedToday = getCompletedToday();
+  const completedIds = new Set(completedToday.map((ce) => ce.exerciseId));
 
   return (
     <div style={{
@@ -120,56 +126,33 @@ export const Dashboard = () => {
             </GlassPanel>
           </div>
 
-          {/* Middle Column - Quests & Quick Actions */}
+          {/* Middle Column - Quests & Recommended */}
           <div className="space-y-6">
             <QuestPanel />
             
-            {/* Quick Actions */}
-            <GlassPanel hover={false}>
-              <h2 className="font-orbitron text-xl text-system-cyan mb-4">QUICK ACTIONS</h2>
-              <div className="grid grid-cols-2 gap-3">
-                <Link to="/workout-logger">
-                  <motion.div
-                    className="p-4 bg-system-cyan/10 border-2 border-system-cyan/30 rounded-lg text-center hover:border-system-cyan hover:shadow-cyan-glow-sm transition-all"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <div className="text-2xl mb-2">💪</div>
-                    <div className="font-rajdhani text-sm text-system-cyan">Log Workout</div>
-                  </motion.div>
+            {/* Recommended Workout */}
+            {recommendedExercise && (
+              <GlassPanel hover={false}>
+                <h2 style={{
+                  fontFamily: 'Orbitron, sans-serif',
+                  fontSize: '1.25rem',
+                  color: '#00ffff',
+                  marginBottom: '1rem',
+                }}>
+                  ⭐ NEXT RECOMMENDED WORKOUT
+                </h2>
+                <Link to="/workouts" style={{ textDecoration: 'none' }}>
+                  <ExerciseCard
+                    exercise={recommendedExercise}
+                    onClick={() => {}}
+                    isCompleted={completedIds.has(recommendedExercise.id)}
+                  />
                 </Link>
-                <Link to="/plans">
-                  <motion.div
-                    className="p-4 bg-system-cyan/10 border-2 border-system-cyan/30 rounded-lg text-center hover:border-system-cyan hover:shadow-cyan-glow-sm transition-all"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <div className="text-2xl mb-2">📋</div>
-                    <div className="font-rajdhani text-sm text-system-cyan">Workout Plans</div>
-                  </motion.div>
-                </Link>
-                <Link to="/progress">
-                  <motion.div
-                    className="p-4 bg-system-cyan/10 border-2 border-system-cyan/30 rounded-lg text-center hover:border-system-cyan hover:shadow-cyan-glow-sm transition-all"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <div className="text-2xl mb-2">📊</div>
-                    <div className="font-rajdhani text-sm text-system-cyan">Progress</div>
-                  </motion.div>
-                </Link>
-                <Link to="/tutorials">
-                  <motion.div
-                    className="p-4 bg-system-cyan/10 border-2 border-system-cyan/30 rounded-lg text-center hover:border-system-cyan hover:shadow-cyan-glow-sm transition-all"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <div className="text-2xl mb-2">📚</div>
-                    <div className="font-rajdhani text-sm text-system-cyan">Tutorials</div>
-                  </motion.div>
-                </Link>
-              </div>
-            </GlassPanel>
+              </GlassPanel>
+            )}
+
+            {/* Music Controller */}
+            <MusicController />
           </div>
 
           {/* Right Column - Pathway */}

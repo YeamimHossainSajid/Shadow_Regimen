@@ -1,4 +1,4 @@
-import { Dungeon, DungeonDifficulty, WorkoutType } from '../types/hunter';
+import { Dungeon, DungeonDifficulty } from '../types/hunter';
 import { calculateExpFromStats, calculateWorkoutStatGains } from './workoutCalculations';
 
 /**

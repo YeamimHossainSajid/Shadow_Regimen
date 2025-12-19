@@ -334,7 +334,6 @@ export const useHunterStore = create<HunterStore>()(
         const hunter = get().hunter;
         if (!hunter) return;
 
-        const unlockedAchievementIds = new Set(hunter.achievements.map((a) => a.id));
         const newAchievements = [];
 
         // Check each achievement definition
