@@ -41,6 +41,7 @@ export const createNewHunter = (name: string = 'Hunter'): Hunter => {
     shadowArmy: [],
     totalWorkouts: 0,
     totalMinutes: 0,
+    hasCompletedOnboarding: false,
   };
 };
 

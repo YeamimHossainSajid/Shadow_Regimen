@@ -6,6 +6,10 @@ export type WorkoutType = 'strength' | 'cardio' | 'mobility';
 
 export type DungeonDifficulty = 'easy' | 'normal' | 'high-rank' | 'instant';
 
+export type FitnessGoal = 'balanced' | 'muscle-gain' | 'fat-loss' | 'mobility';
+
+export type DifficultyPreference = 'easy' | 'normal' | 'hard';
+
 export interface DailyQuest {
   id: string;
   title: string;
@@ -95,5 +99,8 @@ export interface Hunter {
   lastActivityDate?: string;
   totalWorkouts: number;
   totalMinutes: number;
+  goal?: FitnessGoal;
+  difficulty?: DifficultyPreference;
+  hasCompletedOnboarding?: boolean;
 }
 

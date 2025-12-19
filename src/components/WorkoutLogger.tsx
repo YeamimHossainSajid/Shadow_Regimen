@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useHunterStore } from '../store/hunterStore';
+import { useNotificationStore } from '../store/notificationStore';
+import { calculateWorkoutRewards } from '../utils/workoutCalculations';
 import { WorkoutType } from '../types/hunter';
 import { GlassPanel } from './GlassPanel';
 
@@ -11,7 +13,8 @@ const WORKOUT_TYPES: { value: WorkoutType; label: string; icon: string }[] = [
 ];
 
 export const WorkoutLogger = () => {
-  const { logWorkout } = useHunterStore();
+  const { logWorkout, hunter } = useHunterStore();
+  const { addNotification } = useNotificationStore();
   const [type, setType] = useState<WorkoutType>('strength');
   const [duration, setDuration] = useState<number>(30);
   const [intensity, setIntensity] = useState<number>(3);
@@ -27,7 +30,14 @@ export const WorkoutLogger = () => {
     // Small delay for UX feedback
     await new Promise((resolve) => setTimeout(resolve, 300));
     
+    const previousLevel = hunter?.level || 1;
+    
+    // Calculate expected EXP gain for notification
+    const { expGained } = calculateWorkoutRewards(type, duration, intensity);
+    
     logWorkout(type, duration, intensity, notes || undefined);
+    
+    addNotification(`Workout logged! +${expGained} EXP`, 'exp');
     
     // Reset form
     setDuration(30);
@@ -37,8 +47,9 @@ export const WorkoutLogger = () => {
   };
 
   return (
-    <GlassPanel className="max-w-2xl mx-auto">
-      <form onSubmit={handleSubmit} className="space-y-6">
+    <div className="container mx-auto max-w-4xl px-4 py-8">
+      <GlassPanel className="max-w-2xl mx-auto">
+        <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <h2 className="font-orbitron text-2xl text-system-cyan mb-4">Log Workout</h2>
           <p className="text-sm text-gray-400 font-mono">
@@ -150,6 +161,7 @@ export const WorkoutLogger = () => {
         </motion.button>
       </form>
     </GlassPanel>
+    </div>
   );
 };
 

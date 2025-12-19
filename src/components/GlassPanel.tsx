@@ -30,6 +30,17 @@ export const GlassPanel = ({ children, className = '', onClick, hover = true }: 
   return (
     <Component
       className={`${baseClasses} ${hoverClasses} ${className}`}
+      style={{
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        border: '1px solid rgba(0, 255, 255, 0.4)',
+        borderRadius: '0.5rem',
+        padding: '1.5rem',
+        color: '#ffffff',
+        minHeight: '100px',
+        ...(motionProps.style || {}),
+      }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}

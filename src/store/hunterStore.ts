@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { Hunter, DailyQuest, Workout, WorkoutType, Dungeon, PenaltyQuest } from '../types/hunter';
+import { Hunter, DailyQuest, Workout, WorkoutType, Dungeon, PenaltyQuest, FitnessGoal, DifficultyPreference } from '../types/hunter';
 import { 
   calculateExpForLevel, 
   getRankFromLevel, 
@@ -43,6 +43,9 @@ interface HunterStore {
   
   // Streak Actions
   updateStreak: () => void;
+  
+  // Onboarding Actions
+  completeOnboarding: (name: string, goal: FitnessGoal, difficulty: DifficultyPreference) => void;
 }
 
 /**
@@ -393,6 +396,32 @@ export const useHunterStore = create<HunterStore>()(
         
         // Check achievements after streak update
         get().checkAchievements();
+      },
+
+      completeOnboarding: (name: string, goal: FitnessGoal, difficulty: DifficultyPreference) => {
+        const hunter = get().hunter;
+        if (!hunter) {
+          const newHunter = createNewHunter(name);
+          set({
+            hunter: {
+              ...newHunter,
+              name,
+              goal,
+              difficulty,
+              hasCompletedOnboarding: true,
+            },
+          });
+        } else {
+          set({
+            hunter: {
+              ...hunter,
+              name,
+              goal,
+              difficulty,
+              hasCompletedOnboarding: true,
+            },
+          });
+        }
       },
 
       clearLevelUpFlag: () => {
