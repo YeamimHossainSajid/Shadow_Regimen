@@ -53,5 +53,45 @@
   .glow-pulse {
     animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
+
+  /* Custom range slider styling */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #00ffff;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+    border: 1px solid #00ffff;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #00ffff;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+    border: 1px solid #00ffff;
+  }
+
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 3px;
+    background: rgba(0, 255, 255, 0.2);
+    border-radius: 2px;
+  }
+
+  input[type="range"]::-moz-range-track {
+    height: 3px;
+    background: rgba(0, 255, 255, 0.2);
+    border-radius: 2px;
+  }
 }
 
