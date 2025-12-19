@@ -1,6 +1,7 @@
 import { Hunter, HunterStats } from '../types/hunter';
 import { calculateExpForLevel, getRankFromLevel } from './calculations';
 import { generateDailyQuests } from './questGenerator';
+import { generateDungeons } from './dungeonFactory';
 
 /**
  * Generate a random hex string for IDs
@@ -32,8 +33,14 @@ export const createNewHunter = (name: string = 'Hunter'): Hunter => {
     stats: initialStats,
     rank: getRankFromLevel(initialLevel),
     dailyQuests: generateDailyQuests(),
+    penaltyQuests: [],
+    workouts: [],
+    dungeons: generateDungeons(),
+    achievements: [],
     streak: 0,
     shadowArmy: [],
+    totalWorkouts: 0,
+    totalMinutes: 0,
   };
 };
 
